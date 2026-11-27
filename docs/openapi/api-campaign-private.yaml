@@ -76,6 +76,7 @@ paths:
       parameters:
         - $ref: './parameters-campaign.yaml#/components/parameters/CampaignIdParam'
         - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/StronglyParam'
       responses:
         '200':
           description: Dettaglio della campagna

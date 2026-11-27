@@ -49,3 +49,14 @@ components:
         o non più valida produce un errore 400.
       schema:
         type: string
+
+    StronglyParam:
+      name: strongly
+      in: query
+      required: false
+      description: >-
+        Se true, la lettura sulla tabella delle campagne è fortemente consistente
+        (consistent read). Se false o omesso, la lettura è eventualmente consistente.
+      schema:
+        type: boolean
+        default: false

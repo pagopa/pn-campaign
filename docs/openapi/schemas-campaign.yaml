@@ -9,6 +9,10 @@ components:
     Campaign:
       type: object
       description: Campagna restituita dalle API, allineata all'entità Campaign.
+      ##toDo: rendiamo obbligatori tutti i campi o solo senderId e campaingId?
+      required:
+        - senderId
+        - campaignId
       properties:
         senderId:
           type: string
@@ -64,9 +68,10 @@ components:
           type: array
           description: Configurazione del workflow di invio della campagna.
           items:
-            $ref: '#/components/schemas/WorkflowEntity'
+            $ref: '#/components/schemas/Workflow'
 
-    WorkflowEntity:
+    ##toDo: su pn-delivery è censito come WorkflowEntity, qui posso censirlo solo come Workflow a livello di nomenclatura?
+    Workflow:
       type: object
       description: Definizione di uno step del workflow campagna.
       required:
