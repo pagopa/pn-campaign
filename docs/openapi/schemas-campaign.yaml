@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: Schemi comuni campagne
+  version: '1.0.0'
+  description: Schemi condivisi tra le API del microservizio pn-campaign.
+paths: {}
+components:
+  schemas:
+    Campaign:
+      type: object
+      description: Campagna restituita dalle API, allineata all'entità Campaign.
+      properties:
+        senderId:
+          type: string
+          format: uuid
+          description: Identificativo dell'Ente mittente e chiave di partizione.
+          example: 5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce
+        campaignId:
+          type: string
+          description: Identificativo univoco della campagna e chiave di ordinamento.
+          example: campaign-1
+        title:
+          type: string
+          description: Titolo della campagna.
+          example: First campaign
+        descriptionScope:
+          type: string
+          description: Descrizione estesa dello scopo della campagna.
+        startDate:
+          type: string
+          format: date-time
+          description: Data e ora di inizio campagna, rappresentata come Instant.
+          example: '2026-02-01T00:00:00Z'
+        endDate:
+          type: string
+          format: date-time
+          description: Data e ora di fine campagna, rappresentata come Instant.
+          example: '2026-12-31T23:59:59Z'
+        status:
+          $ref: '#/components/schemas/CampaignStatus'
+        senderContact:
+          type: string
+          description: Recapito del mittente associato alla campagna.
+          example: contact@example.com
+        serviceId:
+          type: string
+          description: Identificativo del servizio applicativo associato.
+        serviceName:
+          type: string
+          description: Nome del servizio applicativo associato.
+        sensitiveContent:
+          type: boolean
+          description: Indica se la campagna tratta contenuti sensibili.
+        stopOnViewed:
+          type: boolean
+          description: Se true, il workflow si interrompe al primo evento di visualizzazione.
+        stopOnPaid:
+          type: boolean
+          description: Se true, il workflow si interrompe al primo evento di pagamento.
+        taxonomyCode:
+          type: string
+          description: Codice di tassonomia associato alla campagna.
+        workflow:
+          type: array
+          description: Configurazione del workflow di invio della campagna.
+          items:
+            $ref: '#/components/schemas/WorkflowEntity'
+
+    WorkflowEntity:
+      type: object
+      description: Definizione di uno step del workflow campagna.
+      required:
+        - channel
+        - recipientType
+        - desiredFeedback
+        - includeAttachment
+      properties:
+        channel:
+          $ref: '#/components/schemas/ChannelType'
+        recipientType:
+          type: array
+          description: Tipologie di destinatario associate allo step.
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/RecipientType'
+          example:
+            - PF
+        timeout:
+          type: string
+          description: Durata massima dello step in formato ISO-8601.
+          example: PT24H
+        desiredFeedback:
+          type: array
+          description: Feedback richiesti per considerare completato lo step.
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/DesiredFeedbackType'
+        includeAttachment:
+          type: boolean
+          description: Indica se nello step vanno inclusi gli allegati.
+          example: false
+
+    ChannelType:
+      type: string
+      description: Canale di invio utilizzabile nella campagna.
+      enum:
+        - IO
+        - EMAIL
+        - SMS
+        - PEC
+        - ANALOG
+      example: IO
+
+    RecipientType:
+      type: string
+      description: Tipologia di destinatario dello step di workflow.
+      enum:
+        - PF
+        - PG
+      example: PF
+
+    DesiredFeedbackType:
+      type: string
+      description: Tipo di feedback richiesto per considerare completato lo step.
+      enum:
+        - READ
+        - RECEIVED
+        - SKIP
+        - SENT
+      example: READ
+
+    CampaignStatus:
+      type: string
+      description: Stato della campagna.
+      enum:
+        - DRAFT
+        - IN_PROGRESS
+        - CANCELED
+        - CONCLUDED
+      example: IN_PROGRESS

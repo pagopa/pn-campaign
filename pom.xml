@@ -81,7 +81,6 @@
 				<configuration>
 					<excludes>
 						<exclude>**/generated/**</exclude>
-						<exclude>**it/pagopa/pn/template/rest/v1/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -91,7 +90,7 @@
 				<version>7.12.0</version>
 				<executions>					
 					<execution>
-						<id>generate-mandate-server</id>
+						<id>generate-campaign-server</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -104,7 +103,7 @@
 								<importMapping>java.util.Date=java.time.Instant</importMapping>
 								<importMapping>Date=java.time.Instant</importMapping>
 							</importMappings>
-							<inputSpec>${project.basedir}/docs/openapi/pn-template.yaml</inputSpec>
+							<inputSpec>${project.basedir}/docs/openapi/api-campaign-private.yaml</inputSpec>
 							<generatorName>spring</generatorName>
               				<library>spring-boot</library>
 							<generateApiDocumentation>false</generateApiDocumentation>
@@ -121,10 +120,10 @@
 								<reactive>true</reactive>
 								<skipDefaultInterface>false</skipDefaultInterface>
 								<useTags>true</useTags>
-								<basePackage>${project.groupId}.template.rest.v1</basePackage>
-								<modelPackage>${project.groupId}.template.rest.v1.dto</modelPackage>
-								<apiPackage>${project.groupId}.template.rest.v1.api</apiPackage>
-								<configPackage>${project.groupId}.template.rest.v1.config</configPackage>
+								<basePackage>${project.groupId}.campaign.rest.v1</basePackage>
+								<modelPackage>${project.groupId}.campaign.rest.v1.dto</modelPackage>
+								<apiPackage>${project.groupId}.campaign.rest.v1.api</apiPackage>
+								<configPackage>${project.groupId}.campaign.rest.v1.config</configPackage>
 							</configOptions>				
 						</configuration>
 					</execution>

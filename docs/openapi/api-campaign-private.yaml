@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  termsOfService: https://termofservice.it
+  x-api-id: api-internal-web-campaign
+  title: 'Piattaforma Notifiche: API campagne interne'
+  x-summary: 'Piattaforma Notifiche: API campagne interne'
+  version: '1.0.0'
+  description: >-
+    API private per consentire ai microservizi client di accedere alle
+    informazioni delle campagne necessarie allo svolgimento delle rispettive
+    funzionalità. Le API coprono gli scenari di accesso puntuale tramite
+    senderId e campaignId e di consultazione delle campagne associate a un
+    senderId.
+  contact:
+    email: pn@pagopa.it
+  license:
+    name: Licenza di PN
+    url: 'https://da-definire/'
+
+servers:
+  - url: https://webapi.pn.pagopa.it
+    description: Ambiente di produzione
+  - url: https://webapi.uat.pn.pagopa.it
+    description: Ambiente di test
+  - url: https://webapi.dev.pn.pagopa.it
+    description: Ambiente di sviluppo
+
+tags:
+  - name: Campaigns
+    description: API private per l'accesso alle informazioni delle campagne da parte dei microservizi client
+
+paths:
+  /campaign-private/v1/campaigns:
+    get:
+      tags:
+        - Campaigns
+      summary: Elenca le campagne associate a un Ente
+      description: >-
+        Recupera la lista paginata delle campagne associate al senderId
+        specificato.
+      operationId: listCampaigns
+      parameters:
+        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/PageSizeParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/NextPagesKeyParam'
+      responses:
+        '200':
+          description: Lista campagne paginata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignSearchResponse'
+        '400':
+          description: Parametri non validi
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'remote-refs.yaml#/components/schemas/Problem'
+        '500':
+          description: Errore interno
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'remote-refs.yaml#/components/schemas/Problem'
+
+  /campaign-private/v1/campaigns/{campaignId}:
+    get:
+      tags:
+        - Campaigns
+      summary: Recupera una campagna tramite le sue chiavi
+      description: >-
+        Recupera i dati della campagna identificata dalla coppia di chiavi
+        senderId e campaignId. Entrambi gli attributi sono necessari per
+        individuare la campagna.
+      operationId: getCampaign
+      parameters:
+        - $ref: './parameters-campaign.yaml#/components/parameters/CampaignIdParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdParam'
+      responses:
+        '200':
+          description: Dettaglio della campagna
+          content:
+            application/json:
+              schema:
+                $ref: './schemas-campaign.yaml#/components/schemas/Campaign'
+        '400':
+          description: Parametri non validi
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'remote-refs.yaml#/components/schemas/Problem'
+        '404':
+          description: Campagna non trovata
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'remote-refs.yaml#/components/schemas/Problem'
+        '500':
+          description: Errore interno
+          content:
+            application/problem+json:
+              schema:
+                $ref: 'remote-refs.yaml#/components/schemas/Problem'
+
+components:
+  schemas:
+    CampaignSearchResponse:
+      type: object
+      description: Risposta paginata della ricerca campagne.
+      required:
+        - resultsPage
+        - moreResult
+      properties:
+        resultsPage:
+          type: array
+          description: Campagne appartenenti alla pagina corrente.
+          items:
+            $ref: './schemas-campaign.yaml#/components/schemas/Campaign'
+        moreResult:
+          type: boolean
+          description: Indica se sono presenti ulteriori pagine di risultati.
+        nextPagesKey:
+          type: string
+          description: >-
+            Chiave da usare per richiedere la pagina successiva.
+            Assente quando moreResult è false.

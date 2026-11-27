@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Parametri comuni campagne
+  version: '1.0.0'
+  description: Parametri condivisi tra le API del microservizio pn-campaign.
+paths: {}
+components:
+  parameters:
+    SenderIdParam:
+      name: senderId
+      in: query
+      required: true
+      description: >-
+        Identificativo UUID dell'Ente mittente. Filtra la lista delle campagne
+        oppure, insieme a campaignId, identifica puntualmente una campagna.
+      schema:
+        type: string
+        format: uuid
+
+    CampaignIdParam:
+      name: campaignId
+      in: path
+      required: true
+      description: >-
+        Identificativo univoco della campagna, usato con senderId per la ricerca
+        puntuale.
+      schema:
+        type: string
+
+    PageSizeParam:
+      name: size
+      in: query
+      required: false
+      description: Numero massimo di elementi da restituire nella pagina corrente.
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 50
+        default: 10
+
+    NextPagesKeyParam:
+      name: nextPagesKey
+      in: query
+      required: false
+      description: >-
+        Chiave restituita dalla precedente invocazione per richiedere la pagina
+        successiva. Deve essere reinviata senza modifiche; una chiave malformata
+        o non più valida produce un errore 400.
+      schema:
+        type: string
