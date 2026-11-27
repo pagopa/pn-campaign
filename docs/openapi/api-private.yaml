@@ -30,7 +30,7 @@ tags:
     description: API private per l'accesso alle informazioni delle campagne da parte dei microservizi client
 
 paths:
-  /campaign-private/v1/campaigns:
+  /campaign-private/v1/senders/{senderId}:
     get:
       tags:
         - Campaigns
@@ -38,9 +38,9 @@ paths:
       description: >-
         Recupera la lista paginata delle campagne associate al senderId
         specificato.
-      operationId: listCampaigns
+      operationId: getCampaignsBySender
       parameters:
-        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdPath'
         - $ref: './parameters-campaign.yaml#/components/parameters/PageSizeParam'
         - $ref: './parameters-campaign.yaml#/components/parameters/NextPagesKeyParam'
       responses:
@@ -63,19 +63,18 @@ paths:
               schema:
                 $ref: 'remote-refs.yaml#/components/schemas/Problem'
 
-  /campaign-private/v1/campaigns/{campaignId}:
+  /campaign-private/v1/senders/{senderId}/campaigns/{campaignId}:
     get:
       tags:
         - Campaigns
       summary: Recupera una campagna tramite le sue chiavi
       description: >-
         Recupera i dati della campagna identificata dalla coppia di chiavi
-        senderId e campaignId. Entrambi gli attributi sono necessari per
-        individuare la campagna.
+        senderId e campaignId.
       operationId: getCampaign
       parameters:
-        - $ref: './parameters-campaign.yaml#/components/parameters/CampaignIdParam'
-        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdParam'
+        - $ref: './parameters-campaign.yaml#/components/parameters/CampaignIdPath'
+        - $ref: './parameters-campaign.yaml#/components/parameters/SenderIdPath'
         - $ref: './parameters-campaign.yaml#/components/parameters/StronglyParam'
       responses:
         '200':
@@ -116,7 +115,7 @@ components:
           type: array
           description: Campagne appartenenti alla pagina corrente.
           items:
-            $ref: './schemas-campaign.yaml#/components/schemas/Campaign'
+            $ref: './schemas-campaign.yaml#/components/schemas/CampaignSummary'
         moreResult:
           type: boolean
           description: Indica se sono presenti ulteriori pagine di risultati.

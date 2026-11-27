@@ -6,18 +6,17 @@ info:
 paths: {}
 components:
   parameters:
-    SenderIdParam:
+    SenderIdPath:
       name: senderId
-      in: query
+      in: path
       required: true
       description: >-
-        Identificativo UUID dell'Ente mittente. Filtra la lista delle campagne
-        oppure, insieme a campaignId, identifica puntualmente una campagna.
+        Identificativo UUID dell'Ente mittente
       schema:
         type: string
         format: uuid
 
-    CampaignIdParam:
+    CampaignIdPath:
       name: campaignId
       in: path
       required: true

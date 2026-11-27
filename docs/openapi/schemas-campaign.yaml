@@ -143,3 +143,59 @@ components:
         - CANCELED
         - CONCLUDED
       example: IN_PROGRESS
+
+    CampaignSummary:
+      type: object
+      description: Modello minimale usato nella risposta di listing campagne.
+      required:
+        - campaignId
+        - senderId
+        - title
+        - pfChannels
+        - pgChannels
+        - campaignStatus
+        - startDate
+        - endDate
+      properties:
+        campaignId:
+          type: string
+          description: Identificativo univoco della campagna.
+          example: campaign-1
+        senderId:
+          type: string
+          format: uuid
+          description: Identificativo UUID dell'Ente mittente.
+          example: 5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce
+        title:
+          type: string
+          description: Titolo sintetico della campagna.
+          example: First campaign
+        pfChannels:
+          type: array
+          description: Elenco dei canali previsti per i destinatari persona fisica della campagna.
+          items:
+            $ref: '#/components/schemas/ChannelType'
+          example:
+            - IO
+            - SMS
+        pgChannels:
+          type: array
+          description: Elenco dei canali previsti per i destinatari persona giuridica della campagna.
+          items:
+            $ref: '#/components/schemas/ChannelType'
+          example:
+            - PEC
+            - ANALOG
+        campaignStatus:
+          $ref: '#/components/schemas/CampaignStatus'
+          example: IN_PROGRESS
+        startDate:
+          type: string
+          format: date-time
+          description: Data e ora di inizio campagna in formato UTC.
+          example: 2026-02-01T00:00:00Z
+        endDate:
+          type: string
+          format: date-time
+          description: Data e ora di fine campagna in formato UTC.
+          example: 2026-12-31T23:59:59Z
